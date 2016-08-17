@@ -90,3 +90,16 @@ func BenchmarkJSSchema(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkJSONUnmarshal(b *testing.B) {
+	all := allObjects()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		for j, content := range all {
+			var v interface{}
+			if err := json.Unmarshal([]byte(content), &v); err != nil {
+				b.Fatalf("failed to unmarshal %d\n%s\nbecause\n%s", j, content, err)
+			}
+		}
+	}
+}
